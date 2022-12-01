@@ -16,7 +16,7 @@ namespace ProyectosConstruccion.Negocio.DtoModels
         string Serial,
         byte? IdTipo,
         byte? IdLider,
-        HashSet<CompraDTO> compras
+        HashSet<CompraDTO>? compras
  );
 
     public record CompraDTO(

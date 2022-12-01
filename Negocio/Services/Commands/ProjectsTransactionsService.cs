@@ -1,13 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ProyectosConstruccion.Negocio.DtoModels;
+using ProyectosConstruccion.Persistencia.Models;
 using System.Threading.Tasks;
 
 namespace ProyectosConstruccion.Negocio.Services
 {
-    class ProjectsTransactionsService
+    public partial class ProjectsService
     {
-        //TODO: Implementar transactions y jwt
+        //TODO: Implementar jwt
+        public async Task AddProjectAsync(ProyectoDTO project)
+        {
+            var proyecto = _mapper.Map<Proyecto>(project);
+
+            await _repository.AddProjectsAsync(proyecto);
+        }
+
+        public void UpdateProject(ProyectoDTO project)
+        {
+            var proyecto = _mapper.Map<Proyecto>(project);
+
+            _repository.UpdateProject(proyecto);
+        }
+        public void DeleteProject(ProyectoDTO project)
+        {
+            var proyecto = _mapper.Map<Proyecto>(project);
+
+            _repository.DeleteProject(proyecto);
+        }
     }
 }

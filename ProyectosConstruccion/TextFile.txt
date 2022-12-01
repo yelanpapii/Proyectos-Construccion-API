@@ -1,3 +1,2 @@
 ﻿Implementar Jwt auth
-Pagination[DOCUMENTAR]
-TransactionProjects
+

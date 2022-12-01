@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProyectosConstruccion.Negocio.Repository
 {
-    public class ProjectsRepository : IProjectRepository
+    public partial class ProjectsRepository : IProjectRepository
     {
         private readonly proyectoconstruccionContext _context;
 
@@ -22,6 +22,7 @@ namespace ProyectosConstruccion.Negocio.Repository
             return await _context.Proyectos
                 .CountAsync();
         }
+
         public async Task<IEnumerable<Proyecto>> GetAllProjectsAsync(int pageNumber, int pageSize)
         {
             return await _context.Proyectos

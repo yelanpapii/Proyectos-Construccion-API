@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using ProyectosConstruccion.Persistencia.Interceptor;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -15,18 +16,12 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-            ////try
-            ////{
-            ////    configuration = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("secrets.json").Build();
-            ////}
-            ////catch (Exception e)
-            ////{
-            ////    Console.WriteLine("Error al inicializar path secrets.json: " + e);
-            ////}
-
-            services.AddDbContext<proyectoconstruccionContext>(options =>
-                 options.UseMySQL(configuration.GetConnectionString("Proyectos")
-            ));
+            services.AddSingleton<AuditableEntityInterceptor>();
+            services.AddDbContext<proyectoconstruccionContext>((sp, options) =>
+            {
+                var interceptor = sp.GetRequiredService<AuditableEntityInterceptor>();
+               options.UseMySQL(configuration.GetConnectionString("Proyectos")).AddInterceptors(interceptor);
+            });
 
             return services;
         }

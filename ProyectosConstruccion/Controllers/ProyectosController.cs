@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Update;
 using ProyectosConstruccion.Filters;
 using ProyectosConstruccion.Helpers;
 using ProyectosConstruccion.Negocio.DtoModels;
 using ProyectosConstruccion.Negocio.Services.Interfaces;
 using ProyectosConstruccion.Wrappers;
-using System.Collections;
-using System.Collections.Generic;
+using Serilog;
+using System;
 using System.Threading.Tasks;
 
 namespace ProyectosConstruccion.Controllers
@@ -55,6 +56,22 @@ namespace ProyectosConstruccion.Controllers
         public async Task<object> GetSelect(int id)
         {
             return await _projectsService.GetProjectBySelectLoadingAsync(id);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<string>> AddProject([FromBody] ProyectoDTO dto)
+        {
+            try
+            {
+                await _projectsService.AddProjectAsync(dto);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.StackTrace);
+                return BadRequest("Cannot add project");
+            }
+
+            return Ok("Project Succesfully Added");
         }
     }
 }

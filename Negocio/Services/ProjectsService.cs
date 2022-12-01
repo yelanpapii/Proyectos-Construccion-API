@@ -3,12 +3,11 @@ using ProyectosConstruccion.Negocio.DtoModels;
 using ProyectosConstruccion.Negocio.Repository.Interfaces;
 using ProyectosConstruccion.Negocio.Services.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectosConstruccion.Negocio.Services
 {
-    public class ProjectsService : IProjectsService
+    public partial class ProjectsService : IProjectsService
     {
         private readonly IProjectRepository _repository;
         private readonly IMapper _mapper;

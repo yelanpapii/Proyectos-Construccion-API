@@ -66,5 +66,20 @@ namespace ProyectosConstruccion.Negocio.Cache
                    return await _service.CountProjectsAsync();
                });
         }
+
+        public async Task AddProjectAsync(ProyectoDTO project)
+        {
+             await _service.AddProjectAsync(project);
+        }
+
+        public void UpdateProject(ProyectoDTO project)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteProject(ProyectoDTO project)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
