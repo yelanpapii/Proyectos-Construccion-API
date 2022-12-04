@@ -28,4 +28,10 @@ namespace ProyectosConstruccion.Negocio.DtoModels
           short? IdProyecto,
           byte? IdMaterialConstruccion
         );
+
+    public record UserDTO(int? Id,
+        string Name,
+        string Password,
+        string? Rol);
+
 }

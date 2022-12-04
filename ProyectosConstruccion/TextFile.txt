@@ -1,2 +1,2 @@
-﻿Implementar Jwt auth
+﻿Implementar Helper Jwt
 

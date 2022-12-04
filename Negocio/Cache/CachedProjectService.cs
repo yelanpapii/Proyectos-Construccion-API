@@ -19,28 +19,15 @@ namespace ProyectosConstruccion.Negocio.Cache
             _memoryCache = cache;
         }
 
-        public async Task<IEnumerable<ProyectoDTO>> GetAllProjectsAsync(int PageNumber, int PageSize)
+        public async Task<IEnumerable<ProyectoDTO>> GetAllProjectsAsync(int PageNumber, int PageSize = 10)
         {
             return await _memoryCache.GetOrCreateAsync(PageNumber,
                  async entry =>
                  {
-                     entry.SetSize(100);
                      entry.SetSlidingExpiration(TimeSpan.FromMinutes(3));
                      entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
-                     return await _service.GetAllProjectsAsync(int.Parse(entry.Key.ToString()), PageSize);
+                     return await _service.GetAllProjectsAsync(PageNumber: PageNumber, PageSize);
                  });
-        }
-
-        public async Task<object> GetProjectBySelectLoadingAsync(int id)
-        {
-            return await _memoryCache.GetOrCreateAsync(id,
-                async entry =>
-                {
-                    entry.SetSize(100);
-                    entry.SetSlidingExpiration(TimeSpan.FromMinutes(3));
-                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
-                    return await _service.GetProjectBySelectLoadingAsync(int.Parse(entry.Key.ToString()));
-                });
         }
 
         public async Task<ProyectoDTO> GetProjectByIdAsync(int id)
@@ -51,7 +38,7 @@ namespace ProyectosConstruccion.Negocio.Cache
                     entry.SetSize(100);
                     entry.SetSlidingExpiration(TimeSpan.FromMinutes(3));
                     entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(7);
-                    return await _service.GetProjectByIdAsync(int.Parse(entry.Key.ToString()));
+                    return await _service.GetProjectByIdAsync(id);
                 });
         }
 
@@ -69,15 +56,20 @@ namespace ProyectosConstruccion.Negocio.Cache
 
         public async Task AddProjectAsync(ProyectoDTO project)
         {
-             await _service.AddProjectAsync(project);
+            await _service.AddProjectAsync(project);
         }
 
         public void UpdateProject(ProyectoDTO project)
         {
-            throw new NotImplementedException();
+            _service.UpdateProject(project);
         }
 
         public void DeleteProject(ProyectoDTO project)
+        {
+            _service.AddProjectAsync(project);
+        }
+
+        public Task<object> GetProjectBySelectLoadingAsync(int id)
         {
             throw new NotImplementedException();
         }

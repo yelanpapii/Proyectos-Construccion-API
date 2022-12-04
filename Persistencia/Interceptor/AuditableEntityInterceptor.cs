@@ -34,5 +34,30 @@ namespace ProyectosConstruccion.Persistencia.Interceptor
 
             return base.SavingChangesAsync(eventData, result, cancellationToken);
         }
+
+        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+        {
+            var context = eventData.Context;
+
+            if (context is null) return base.SavingChanges(eventData, result);
+
+            IEnumerable<EntityEntry<IAuditableEntity>> entries = context.ChangeTracker.Entries<IAuditableEntity>();
+
+            foreach (var entity in entries)
+            {
+                switch (entity.State)
+                {
+                    case EntityState.Added:
+                        entity.Property(x => x.CreatedOn).CurrentValue = DateTime.UtcNow;
+                        break;
+
+                    case EntityState.Modified:
+                        entity.Property(x => x.ModifiedOn).CurrentValue = DateTime.UtcNow;
+                        break;
+                }
+            }
+
+            return base.SavingChanges(eventData, result);
+        }
     }
 }

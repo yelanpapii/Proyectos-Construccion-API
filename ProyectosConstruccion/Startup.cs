@@ -22,20 +22,45 @@ namespace ProyectosConstruccion
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddScoped<LogFilter>();
-            //services.AddSingleton<IPaginationFilter, PaginationFilter>();
             services.Scan(o =>
             {
                 o.FromAssemblyOf<IPaginationFilter>()
                 .AddClasses(x => x.AssignableTo<IPaginationFilter>()).AsImplementedInterfaces().WithScopedLifetime();
             });
+            services.AddApplicationServices(Configuration);
             services.AddDomainServices(Configuration);
             services.AddPersistenceServices(Configuration);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProyectosConstruccion", Version = "v1" });
+
+                //JWT Authorize for swagger
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "Jwt Auth",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
             });
         }
 
@@ -48,10 +73,15 @@ namespace ProyectosConstruccion
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProyectosConstruccion v1"));
             }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProyectosConstruccion v1"));
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

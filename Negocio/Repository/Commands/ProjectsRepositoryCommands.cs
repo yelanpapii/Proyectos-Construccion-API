@@ -15,11 +15,13 @@ namespace ProyectosConstruccion.Negocio.Repository
         public void DeleteProject(Proyecto project)
         {
             _context.Proyectos.Remove(project);
+            _context.SaveChanges();
         }
 
         public void UpdateProject(Proyecto project)
         {
             _context.Proyectos.Update(project);
+            _context.SaveChanges();
         }
     }
 }

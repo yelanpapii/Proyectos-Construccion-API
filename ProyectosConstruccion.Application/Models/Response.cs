@@ -1,4 +1,4 @@
-﻿namespace ProyectosConstruccion.Wrappers
+﻿namespace ProyectosConstruccion.Application.Models
 {
     public class Response<T>
     {
