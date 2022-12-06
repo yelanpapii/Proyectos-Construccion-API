@@ -12,16 +12,16 @@ namespace ProyectosConstruccion.Negocio.Repository
             await _context.SaveChangesAsync();
         }
 
-        public void DeleteProject(Proyecto project)
+        public async Task DeleteProject(Proyecto project)
         {
-            _context.Proyectos.Remove(project);
-            _context.SaveChanges();
+            _context.Remove(project);
+            await _context.SaveChangesAsync();
         }
 
-        public void UpdateProject(Proyecto project)
+        public async Task UpdateProject(Proyecto project)
         {
-            _context.Proyectos.Update(project);
-            _context.SaveChanges();
+            _context.Update(project);
+            await _context.SaveChangesAsync();
         }
     }
 }

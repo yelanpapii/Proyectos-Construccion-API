@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProyectosConstruccion.Application.Helpers;
 using ProyectosConstruccion.Application.Models;
+using ProyectosConstruccion.Application.Services.Interfaces;
 using ProyectosConstruccion.Filters;
 using ProyectosConstruccion.Helpers;
 using ProyectosConstruccion.Negocio.DtoModels;
@@ -18,12 +20,15 @@ namespace ProyectosConstruccion.Controllers
     public class ProyectosController : ControllerBase
     {
         private readonly IProjectsService _projectsService;
+        private readonly IUsersService _usersService;
         private readonly IUriService _uriService;
 
         public ProyectosController(
             IProjectsService projects,
+            IUsersService usersService,
             IUriService uriService)
         {
+            _usersService = usersService;
             _projectsService = projects;
             _uriService = uriService;
         }
@@ -61,12 +66,6 @@ namespace ProyectosConstruccion.Controllers
             }
         }
 
-        //[HttpGet("select/{id}")]
-        //public async Task<object> GetSelect(int id)
-        //{
-        //    return await _projectsService.GetProjectBySelectLoadingAsync(id);
-        //}
-
         //-------------------Commands-------------------------
         [HttpPost]
         public async Task<ActionResult<string>> AddProject([FromBody] ProyectoDTO dto)
@@ -85,11 +84,19 @@ namespace ProyectosConstruccion.Controllers
         }
 
         [HttpPut]
-        public ActionResult<string> UpdateProject([FromBody] ProyectoDTO dto)
+        [Authorize]
+        public async  Task<ActionResult<string>> UpdateProject([FromBody] ProyectoDTO dto)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var token = JwtHelper.GetUserFromToken(identity, _usersService);
+            var currentUser = token.Data;
+
+            if (currentUser is null) return BadRequest("User doesnt exists");
+            if (currentUser.Rol != "Administrador") return Unauthorized();
+
             try
             {
-                _projectsService.UpdateProject(dto);
+                await _projectsService.UpdateProject(dto);
             }
             catch (Exception e)
             {
@@ -105,9 +112,10 @@ namespace ProyectosConstruccion.Controllers
         public async Task<ActionResult<object>> DeleteProject(int id)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var token = Jwt.GetUserFromToken(identity);
+            var token = JwtHelper.GetUserFromToken(identity, _usersService);
             var currentUser = token.Data;
 
+            if (currentUser is null) return BadRequest("User doesnt exists");
             if (currentUser.Rol != "Administrador") return Unauthorized();
 
             try
@@ -115,7 +123,7 @@ namespace ProyectosConstruccion.Controllers
                 var project = await _projectsService.GetProjectByIdAsync(id);
                 if (project is null) return BadRequest("Project doesnt exists");
 
-                _projectsService.DeleteProject(project);
+                await _projectsService.DeleteProject(project);
             }
             catch (Exception e)
             {

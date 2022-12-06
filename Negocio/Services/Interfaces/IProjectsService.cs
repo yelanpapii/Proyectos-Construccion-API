@@ -16,8 +16,8 @@ namespace ProyectosConstruccion.Negocio.Services.Interfaces
 
         public Task AddProjectAsync(ProyectoDTO project);
 
-        public void UpdateProject(ProyectoDTO project);
+        public Task UpdateProject(ProyectoDTO project);
 
-        public void DeleteProject(ProyectoDTO project);
+        public Task DeleteProject(ProyectoDTO project);
     }
 }

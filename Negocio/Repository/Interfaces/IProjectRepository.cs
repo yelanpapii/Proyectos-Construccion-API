@@ -11,7 +11,7 @@ namespace ProyectosConstruccion.Negocio.Repository.Interfaces
         public Task<Proyecto> GetProjectById(int id);
         public Task<object> GetProjectsBySelectLoading(int id);
         public Task AddProjectsAsync(Proyecto project);
-        public void UpdateProject(Proyecto project);
-        public void DeleteProject(Proyecto id);
+        public Task UpdateProject(Proyecto project);
+        public Task DeleteProject(Proyecto id);
     }
 }

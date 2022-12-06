@@ -1,1 +1,2 @@
-﻿Los usuarios deberian ser extraidos de una base de datos, pero esta vez esta Hardcodeado solo para fines demostrativos!.
+﻿Los usuarios deberian ser extraidos de una base de datos, pero esta vez esta Hardcodeado solo para fines demostrativos!. 
+Talvez podria implementar una base de datos con usuarios para el login?.

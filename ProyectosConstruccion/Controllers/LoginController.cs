@@ -20,6 +20,9 @@ namespace ProyectosConstruccion.Controllers
         [HttpPost]
         public object LogIn([FromBody] UserDTO user)
         {
+            var validate = _usersService.Login(user);
+            if (validate is null) return BadRequest("User doesnt exist");
+
             return _usersService.Login(user);
         }
     }

@@ -14,17 +14,17 @@ namespace ProyectosConstruccion.Negocio.Services
             await _repository.AddProjectsAsync(proyecto);
         }
 
-        public void UpdateProject(ProyectoDTO project)
+        public async Task UpdateProject(ProyectoDTO project)
         {
             var proyecto = _mapper.Map<Proyecto>(project);
 
-            _repository.UpdateProject(proyecto);
+            await _repository.UpdateProject(proyecto);
         }
-        public void DeleteProject(ProyectoDTO project)
+        public async Task DeleteProject(ProyectoDTO project)
         {
             var proyecto = _mapper.Map<Proyecto>(project);
 
-            _repository.DeleteProject(proyecto);
+            await _repository.DeleteProject(proyecto);
         }
     }
 }
